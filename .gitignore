@@ -70,6 +70,7 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 
+
 ### Dart Patch ###
 # dotenv environment variables file
 .env
@@ -86,6 +87,12 @@ lib/generated_plugin_registrant.dart
 # Regenerating the pubspec.lock file lets you test your package against the latest compatible versions of its dependencies.
 # See https://dart.dev/guides/libraries/private-files#pubspeclock
 #pubspec.lock
+
+# Firebase 
+**/GoogleService-Info.plist
+**/firebase_options.dart
+**/.firebaserc
+**/.env
 
 # Android related
 **/android/**/gradle-wrapper.jar
