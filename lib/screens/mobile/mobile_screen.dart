@@ -13,18 +13,26 @@ class MobileScreen extends StatefulWidget {
 
 class _MobileScreenState extends State<MobileScreen> {
   late TextEditingController controller;
+  late TextEditingController descontroller;
+
   int? selectedIndex;
   String? projectTitle;
 
   @override
   void initState() {
     controller = TextEditingController();
+    descontroller = TextEditingController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    List todo = [];
+    List doing = [];
+    List done = [];
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -35,7 +43,14 @@ class _MobileScreenState extends State<MobileScreen> {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: projectTitle == null ? null : () {},
+              onPressed: projectTitle == null
+                  ? null
+                  : () => createAlertDialog(
+                        context: context,
+                        titleCon: controller,
+                        desCon: descontroller,
+                        proejctTitle: projectTitle!,
+                      ),
             )
           ],
           // * Tab Bar * //
@@ -141,43 +156,115 @@ class _MobileScreenState extends State<MobileScreen> {
               }
               // 앱 진입 직후 표시
               if (projectTitle == null) {
+                // TODO 버튼 추가해서 탭시 drawer가 열리도록 만들기
                 return Container(
                     //color: Colorz.cMainLight,
                     );
               }
+              var document = snapshot.data!.docs;
               // data가 없을 때
-              if (!snapshot.hasData || snapshot.data!.docs.length == 0) {
-                return Container(
-                  child: const Center(
-                    child: Text('No Data'),
-                  ),
+              if (!snapshot.hasData || document.length == 0) {
+                return const Center(
+                  child: Text('No Data'),
                 );
               }
 
-              return Container(
-                child: TabBarView(
-                  children: [
-                    ListView.builder(
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(snapshot.data!.docs[index].docId),
-                        );
-                      },
-                    ),
-                    Container(
-                      color: Colorz.cMainLight,
-                      child: const Center(
-                        child: Text('진행중'),
-                      ),
-                    ),
-                    Container(
-                      color: Colorz.cMainLight,
-                      child: const Center(
-                        child: Text('완료'),
-                      ),
-                    ),
-                  ],
-                ),
+              todo.clear();
+              doing.clear();
+              done.clear();
+              for (int i = 0; i < document.length; i++) {
+                if (document[i]['index'] == 0) todo.add(document[i]);
+                if (document[i]['index'] == 1) doing.add(document[i]);
+                if (document[i]['index'] == 2) done.add(document[i]);
+              }
+
+              return TabBarView(
+                children: [
+                  ListView.builder(
+                    itemCount: todo.length,
+                    itemBuilder: (context, index) {
+                      print(todo[index]['index']);
+                      print(todo[index]['title']);
+
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colorz.cMain,
+                            width: 0.8,
+                          ),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          title: Text(todo[index]['title']),
+                          subtitle: Text(
+                            todo[index]['description'],
+                            style: const TextStyle(color: Colorz.cMain),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  ListView.builder(
+                    itemCount: doing.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colorz.cMain,
+                            width: 0.8,
+                          ),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          title: Text(doing[index]['title']),
+                          subtitle: Text(
+                            doing[index]['description'],
+                            style: const TextStyle(color: Colorz.cMain),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  ListView.builder(
+                    itemCount: done.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colorz.cMain,
+                            width: 0.8,
+                          ),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          title: Text(done[index]['title']),
+                          subtitle: Text(
+                            done[index]['description'],
+                            style: const TextStyle(color: Colorz.cMain),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             },
           ),

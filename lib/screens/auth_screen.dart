@@ -2,9 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_plus/screens/login_screen.dart';
 import 'package:todo_plus/screens/mobile/mobile_screen.dart';
-import 'package:todo_plus/screens/mobile/project_list_screen.dart';
-import 'package:todo_plus/utils/responsive_layout.dart';
-import 'package:todo_plus/screens/tablet/tablet_project_notes.dart';
 import 'package:todo_plus/services/data_service.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -20,10 +17,7 @@ class AuthScreen extends StatelessWidget {
           if (snapshot.hasData) {
             DataService.userUid = FirebaseAuth.instance.currentUser!.uid;
             //return const ViewProjectsScreen();
-            return const ResponseLayout(
-              mobileScreen: MobileScreen(),
-              tabletScreen: TabletScreen(),
-            );
+            return const MobileScreen();
           }
           // not login
           else {

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_plus/models/model.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,7 +31,7 @@ class DataService {
   static Stream<QuerySnapshot> getNotes(String title) {
     CollectionReference collectionReference = _mainCollection
         .doc(userUid)
-        .collection('project')
+        .collection('projects')
         .doc(title)
         .collection('notes');
 
@@ -42,23 +40,28 @@ class DataService {
 
   // Add Note
   static Future<void> addNote(
-      {required String title, required String? description, required int index}) async {
+      {required String title,
+      required String project,
+      required String? description,
+      required int index}) async {
     DocumentReference documentReference = _mainCollection
         .doc(userUid)
         .collection('projects')
-        .doc()
+        .doc(project)
         .collection('notes')
         .doc();
 
     DataModel data =
-        DataModel(title: title, description: description = '', index: index);
+        DataModel(title: title, description: description = description!, index: index);
 
-    await documentReference.set(data);
+    await documentReference.set(data.toMap());
   }
 
   // Update
   void update() {}
 
   // Delete
-  void delete() {}
+  void delete() {
+    
+  }
 }

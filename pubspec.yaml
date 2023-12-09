@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  adaptive_theme: ^3.4.0
   bootstrap_icons: ^1.11.0
   cloud_firestore: ^4.9.2
   cupertino_icons: ^1.0.2
@@ -37,7 +36,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.4.0
-  flutter_slider_drawer: ^2.1.3
   fluttertoast: ^8.2.2
   go_router: ^10.1.2
   google_fonts: ^5.1.0
